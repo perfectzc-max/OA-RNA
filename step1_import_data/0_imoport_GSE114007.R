@@ -31,6 +31,7 @@ pdata_GSE114007 = rbind(pData(eSet[[1]]),pData(eSet[[2]]))
 # 这里文件里提到了counts，那就是原始counts矩阵
 matrixfile=list.files("./",full.names = T,pattern = "GSE114007_raw")
 m_counts_GSE114007_1=read_excel("GSE114007_raw_counts.xlsx") %>% as.data.frame()
+#表格有两个sheet
 m_counts_GSE114007_2=read_excel("GSE114007_raw_counts.xlsx", sheet = "OA") %>% as.data.frame()
 m_counts_GSE114007=full_join(m_counts_GSE114007_1,m_counts_GSE114007_2,by="symbol")
 row.names(m_counts_GSE114007)=as.character(m_counts_GSE114007$symbol)
