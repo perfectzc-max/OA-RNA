@@ -16,6 +16,9 @@ install.packages("pheatmap")
 install.packages("tidyverse")
 library("pasilla")
 library("tidyverse")
+
+install.packages("locfit",type="binary")
+library("locfit")
 library("DESeq2")
 library("pheatmap")
 library("RColorBrewer")
@@ -24,10 +27,17 @@ library("apeglm")
 # library("DEGreport")
 # 1.count data+information table
 cts =as.matrix(m_counts_GSE114007)
+col_114007=  str_to_upper(colnames(m_counts_GSE114007))
+colnames(cts)=col_114007
+cts=as.matrix(cts)
 coldata=pdata_GSE114007$characteristics_ch1.2 %>% as.data.frame()
+#coldata=pdata_GSE114007$title %>% as.data.frame()
 rownames(coldata)=pdata_GSE114007$title
+pdata_GSE114007$title=str_to_upper(pdata_GSE114007$title)
 colnames(coldata)=c("condition")
 coldata$condition <- factor(coldata$condition)
+rownames(coldata)
+colnames(cts)
 all(rownames(coldata) %in% colnames(cts))
 cts <- cts[, rownames(coldata)]
 #构建对象
@@ -55,6 +65,11 @@ sum(res$padj < 0.05, na.rm=TRUE)
 # 展示pvalue最小的那个
 plotCounts(dds, gene=which.min(res$padj), intgroup="condition")
 #4.加ENTREZID列，用于富集分析（symbol转entrezid，然后inner_join）
+#if (!requireNamespace("BiocManager", quietly = TRUE))
+  #install.packages("BiocManager")
+#BiocManager::install("clusterProfiler")
+#BiocManager::install("clusterProfiler",force = TRUE)
+#install.packages("clusterProfiler")
 library(clusterProfiler)
 library(org.Hs.eg.db)
 s2e <- bitr(rownames(res), 

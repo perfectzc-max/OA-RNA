@@ -21,15 +21,26 @@ head(deg)
 #为deg数据框添加几列
 #1.加probe_id列，把行名变成一列
 library(dplyr)
-deg <- mutate(deg,probe_id=rownames(deg))
+deg <- mutate(deg,symbol=rownames(deg))
 head(deg)
 #2.加上探针注释
+#方法1 BioconductorR包(最常用)
+gse_number=168505
+#http://www.bio-info-trainee.com/1399.html
+if(!require(hgu133plus2.db))BiocManager::install("hgu133plus2.db")
+library(hgu133plus2.db)
+ls("package:hgu133plus2.db")
+#转换为探针id与基因名称对应表格
+ids <- toTable(hgu133plus2SYMBOL)
+head(ids)
+
 #一个基因对应多个探针，可以取最大值、随机去重、平均值
 ids = ids[!duplicated(ids$symbol),]
 #其他去重方式在zz.去重.R
-deg <- inner_join(deg,ids,by="probe_id")
+deg <- inner_join(deg,ids,by="symbol")
 head(deg)
 nrow(deg)
+
 
 #3.加change列,标记上下调基因
 logFC_t=1
@@ -52,4 +63,4 @@ dim(deg)
 deg <- inner_join(deg,s2e,by=c("symbol"="SYMBOL"))
 dim(deg)
 length(unique(deg$symbol))
-save(Group,deg,logFC_t,P.Value_t,gse_number,file = "step4output.Rdata")
+save(Group_1,deg,logFC_t,P.Value_t,gse_number,file = "step4output_GSE168505.Rdata")

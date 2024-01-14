@@ -25,7 +25,8 @@ eSet=downGSE("GSE114007")
 exp = exprs(eSet[[1]])
 # 临床信息
 pdata_GSE114007 = rbind(pData(eSet[[1]]),pData(eSet[[2]]))
-
+pdata_GSE114007$title = sort(pdata_GSE114007$title)
+pdata_GSE114007
 #数据另下
 #记录了表达矩阵的文件
 # 这里文件里提到了counts，那就是原始counts矩阵
@@ -34,11 +35,15 @@ m_counts_GSE114007_1=read_excel("GSE114007_raw_counts.xlsx") %>% as.data.frame()
 #表格有两个sheet
 m_counts_GSE114007_2=read_excel("GSE114007_raw_counts.xlsx", sheet = "OA") %>% as.data.frame()
 m_counts_GSE114007=full_join(m_counts_GSE114007_1,m_counts_GSE114007_2,by="symbol")
-row.names(m_counts_GSE114007)=as.character(m_counts_GSE114007$symbol)
+row.names(m_counts_GSE114007_1)=as.character(m_counts_GSE114007_1$symbol)
+row.names(m_counts_GSE114007_2)=as.character(m_counts_GSE114007_2$symbol)
+m_counts_GSE114007_1=m_counts_GSE114007_1[,-1]
+m_counts_GSE114007_2=m_counts_GSE114007_2[,-1]
+rownames(m_counts_GSE114007)=m_counts_GSE114007$symbol
 m_counts_GSE114007=m_counts_GSE114007[,-1]
 #文章中的分组信息
 group_info_GSE114007=str_split(pdata_GSE114007$title,"_",simplify = T)[,1]
-
+group_info_GSE114007=str_to_upper(group_info_GSE114007)
+group_info_GSE114007
 #保存表达矩阵
 save(m_counts_GSE114007,group_info_GSE114007,pdata_GSE114007,file = "./meddata/mcounts_GSE114007.Rdata")
-

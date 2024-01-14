@@ -35,6 +35,7 @@ for (i in 2:length(matrixfile)) {
   m_tpm=left_join(temp,m_tpm,by="Gene")
 
 }
+
 #查看数据分布
 boxplot(m_tpm[,1])
 
@@ -88,4 +89,5 @@ if(F){
 
 # 方法4 自主注释 
 #https://mp.weixin.qq.com/s/mrtjpN8yDKUdCSvSUuUwcA
-save(exp,Group,ids,gse_number,file = "step2output.Rdata")
+##目标对象Group不存在
+save(exp,ids,gpl_number,file = "step2output_GSE104782.Rdata")

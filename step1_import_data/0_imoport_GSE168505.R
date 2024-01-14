@@ -28,13 +28,16 @@ pdata_GSE168505 = pData(eSet[[1]])
 #记录了表达矩阵的文件
 # 这里文件里提到了RSEM v1.3.1 (rsem-calculate-expression function w/ STAR aligning)，通常就是FPKM矩阵了（看文章以进一步确定！）
 #文章里用的DESeq2，这里应该是校正后的counts数量，说的很不清楚
-matrixfile=list.files("./GSE168505_osteoarthritis_matrix.tsv/",full.names = T)
+matrixfile=list.files("./GSE168505/",full.names = T,pattern = ".tsv")
+matrixfile
 m_fpkm_GSE168505=read.table(matrixfile[1],header = T)
 row.names(m_fpkm_GSE168505)=m_fpkm_GSE168505$gene
 m_fpkm_GSE168505=m_fpkm_GSE168505[,-1]
 #文章中的分组信息
 group_info_GSE168505= pdata_GSE168505$`disease state:ch1`
-
+group_info_GSE168505
 #保存表达矩阵
 save(m_fpkm_GSE168505,group_info_GSE168505,pdata_GSE168505,file = "./meddata/mcounts_GSE168505.Rdata")
+
+
 

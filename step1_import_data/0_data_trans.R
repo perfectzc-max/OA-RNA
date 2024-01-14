@@ -1,5 +1,5 @@
 #####参考https://blog.csdn.net/weixin_56259962/article/details/123140630
-
+rm(list = ls())
 #从gtf文件调取基因
 library(GenomicFeatures)
 ##将数据导入为txdb对象（等待时间较长）
@@ -53,6 +53,7 @@ load("./meddata/ID_gene_length.Rdata")
 load("./meddata/mcounts_GSE114007.Rdata")
 
 #基因表达量数据框中基因对应长度
+
 gene_GSE114007=rownames(m_counts_GSE114007)
 gene_GSE114007=as.data.frame(gene_GSE114007)
 colnames(gene_GSE114007)=c("gene_name")
@@ -65,9 +66,9 @@ tpm_factor =1e6/sum(gene_GSE114007$length/1000)
 as.numeric(gene_GSE114007$length)
 as.numeric(tpm_factor)
 #as.numeric(m_counts_GSE114007[,-1])
-m_counts_GSE114007[,-1]
 
-m_counts_GSE114007[,-1]=m_counts_GSE114007[,-1]*tpm_factor/gene_GSE114007$length
+
+m_counts_GSE114007[,]=m_counts_GSE114007[,]*tpm_factor/gene_GSE114007$length
 m_tpm_GSE114007=m_counts_GSE114007
 save(m_tpm_GSE114007,file="./meddata/m_tpm_GSE114007.RData")
 
