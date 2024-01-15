@@ -13,4 +13,4 @@ Analysis RNA-Seq data of OA samples
 
 2024.01.16 ZC  
 1.更新2_DEGs_DESEQ2.R，添加作图函数四个，修改分组  
-2.更新2_GO_KEGG.r，富集分析，待完善
+2.更新2_GO_KEGG.R，富集分析，包含ENTREZ注释步骤，待完善  
