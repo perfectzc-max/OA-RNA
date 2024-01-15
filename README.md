@@ -10,3 +10,6 @@ Analysis RNA-Seq data of OA samples
 3.1_PCA_heatmap.R 补充GSE114007的counts转化为tpm的热图  
 4.2_DEGs_DESEQ2.R 统一GSE114007不同来源样本的title名称  
 5.2_DEGs_limma.R 添加探针注释ids  
+
+2024.01.16 ZC
+1.更新2_DEGs_DESEQ2.R，添加作图函数四个，修改分组  
