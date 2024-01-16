@@ -54,7 +54,7 @@ res
 # (3)log2FoldChange:取 log2 后的表达量差异 (4)pvalue:统计学差异显著性检验指标 
 # (5)padj:校正后的 pvalue, padj 越小,表示基因表达差异越显著
 summary(res)
-save(res,file = "step2_DE_GSE114007.Rdata")
+# save(res,file = "./meddata/step2_DE_GSE114007.Rdata")
 
 # 简单看看情况
 plotMA(res, main="DESeq2", ylim=c(-2,2))
@@ -68,14 +68,15 @@ plotCounts(dds, gene=which.min(res$padj), intgroup="condition")
 #3.加change列,标记上下调基因
 dat=as.data.frame(res) %>% na.omit()
 dat=rownames_to_column(dat,var = "symbol")
-dat=dat[!duplicated(dat$symbol),]
 logFC_t=1
 P.Value_t = 0.05
 k1 = (dat$padj < P.Value_t)&(dat$log2FoldChange < -logFC_t)
 k2 = (dat$padj < P.Value_t)&(dat$log2FoldChange > logFC_t)
 dat <- mutate(dat,change = ifelse(k1,"down",ifelse(k2,"up","stable")))
-table(dat$change)
+save(res,dat,file = "./meddata/step2_DE_GSE114007.Rdata")
 
+dat=dat[!duplicated(dat$symbol),]
+table(dat$change)
 # 作图
 p <- ggplot(data = dat, 
             aes(x = log2FoldChange, 
