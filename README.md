@@ -17,3 +17,6 @@ Analysis RNA-Seq data of OA samples
 
 2024.01.17 ZC  
 1.补齐kegg plot function文件  
+
+2024.01.21 LZZ
+1.新增DO分析代码 
