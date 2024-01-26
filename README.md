@@ -24,3 +24,4 @@ Analysis RNA-Seq data of OA samples
 2024.01.26 LZZ
 1.新增step3_DDR_exp文件夹
 2.新增1_tpm_boxplot.R文件
+3.新增DDR_gene.xlsx
