@@ -23,5 +23,8 @@ Analysis RNA-Seq data of OA samples
 
 2024.01.26 LZZ
 1.新增step3_DDR_exp文件夹
-2.新增1_tpm_boxplot.R文件
+2.新增1_tpm_boxplot.R文件（基因表达量counts以转换为TPM的方式进行标化）
 3.新增DDR_gene.xlsx
+
+2024.01.30 LZZ
+1.新增1_DEseq2_boxplot.R文件（基因表达量counts以DEseq2的方式进行标化）
