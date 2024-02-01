@@ -28,3 +28,6 @@ Analysis RNA-Seq data of OA samples
 
 2024.01.30 LZZ
 1.新增1_DEseq2_boxplot.R文件（基因表达量counts以DEseq2的方式进行标化）
+
+2024.02.01 LZZ
+1. 新增1_bind_normalized_boxplot.R(对基因表达量进行quantile normalization[limma中voom方法])
