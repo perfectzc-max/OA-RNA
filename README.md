@@ -28,3 +28,12 @@ Analysis RNA-Seq data of OA samples
 
 2024.01.30 LZZ
 1.新增1_DEseq2_boxplot.R文件（基因表达量counts以DEseq2的方式进行标化）
+
+2024.02.01 LZZ
+1. 新增1_bind_normalized_boxplot.R(对基因表达量进行quantile normalization[limma中voom方法])
+
+2024.2.24 LZZ
+1. 新增0_import_GSE51588.R 数据为标化后的表达量
+2. 新增0_bind_data.R 合并GSE114007（标化后）+GSE51588表达矩阵，去批次效应
+3. 新增2_GSVA.R  GSE114007（标化后）+GSE51588表达矩阵 做GSVA分析
+4. 新增2_GSVA_plot.R GSVA结果作图（热图、火山图、柱状图）
