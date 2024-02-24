@@ -1,14 +1,23 @@
 rm(list=ls())
 #####https://blog.csdn.net/weixin_43843918/article/details/135899489
+#if(!requireNamespace("BiocManager",quietly = TRUE))
+  #install.packages("BiocManager")
+#BiocManager::install("DESeq2")
+#BiocManager::install("edgeR")
 library(DESeq2)
+library(edgeR)
 library(dplyr)
 library(RColorBrewer)
 library(tidyverse)
 library(openxlsx)
 library(ggsignif)
 library(ggpubr)
+#BiocManager::install("statmod")
+#BiocManager::install("limma")
+
+#install.packages("edgeR")
 library(limma)
-library(edgeR)
+
 #1.导入数据
 load(file = "./meddata/mcounts_GSE114007.Rdata") #23710
 load(file="./meddata/mcounts_GSE51588.R")
@@ -46,6 +55,7 @@ coldata$condition[str_which(coldata$tittle,'normal')]=c("NORMAL")
 coldata$condition[str_which(coldata$tittle,'Normal')]=c("NORMAL")
 coldata$condition=factor(coldata$condition,levels=c("NORMAL","OA"))
 rownames(coldata)=coldata$tittle
+
 library(dplyr)
 #dim(m_counts_GSE114007)
 #all(colnames(m_counts_GSE114007) == rownames(coldata))
@@ -66,12 +76,54 @@ m_counts_1=na.omit(m_counts_1)#18658
 save(coldata,m_counts,m_counts_1,file = "./meddata/step3_bind_matrix.Rdata")
 
 
-#去掉基因列
+rm(list = ls())
 load("./meddata/step3_bind_matrix.Rdata")
+#基因放到第一列
+m_counts_1=select(m_counts_1,39,everything())
+#样本
+m_counts_2=data.frame(t(m_counts_1))
+colnames(m_counts_2)=m_counts_2[1,]
+m_counts_2=m_counts_2[-1,]
+sample=rownames(m_counts_2)
 
-all(colnames(m_counts) == rownames(coldata))
+#数据框内变量类型由字符变数字
+m_counts_2=as.data.frame(lapply(m_counts_2,as.numeric))
+rownames(m_counts_2)=sample
+class(m_counts_2$A2M)
 
+library(tinyarray)
+coldata$GSE=factor(coldata$GSE,levels = c("GSE114007","GSE51588"))
+PCA_before=prcomp(m_counts_2,
+                  scale = T)
+library(ggplot2)
+#install_github("vqv/ggbiplot")
+library(ggbiplot)
+coldata_2=coldata[,1:2]
+#before removing batch effect
+m_pca_b=m_counts_1
+m_pca_b=m_pca_b[!duplicated(m_pca_b$genename),] #去掉重复基因 12733
+rownames(m_pca_b)=m_pca_b$genename
+m_pca_b=m_pca_b[,-1]
+m_pca_b[1:4,1:4]
+boxplot(m_pca_b,las=2, cex.axis=0.6)
+#normalization
+m_pca_b=scale(m_pca_b)
+boxplot(m_pca_b,las=2,cex.axis=0.6)
+#pca visulization
+draw_pca(m_pca_b,group_list = coldata_2$GSE)
+#remove batch effect(sva Combat package)
+##BiocManager::install("sva")
+library(sva)
+batch=coldata$GSE
+m_pca_a=ComBat(m_pca_b,batch=batch)
+#after removing batch effect
+boxplot(m_pca_a, las=2,cex.axis=0.6)
+draw_pca(exp=m_pca_a,group_list = coldata_2$GSE)
 
+library("openxlsx")
+DDR=read.xlsx("DDR_gene.xlsx")
+m_counts=as.data.frame(data.matrix(m_pca_a)) #12733
+m_counts$Genename=rownames(m_counts)
 
 #normalized read counts
 #dds=DESeqDataSetFromMatrix(countData = m_counts,
@@ -88,19 +140,6 @@ all(colnames(m_counts) == rownames(coldata))
 #normlzd_dds$Genename=rownames(normlzd_dds)
 #save(normlzd_dds,coldata,file="Normalized_GSE114007.R")
 
-
-
-
-rm(list=ls())
-library(dplyr)
-library(RColorBrewer)
-library(tidyverse)
-library(openxlsx)
-library(ggsignif)
-library(ggpubr)
-
-DDR=read.xlsx("DDR_gene.xlsx")
-load("./meddata/step3_bind_matrix.Rdata")
 #normlzd_dds=read.csv("Normalized_GSE114007.csv",header = T)
 #genenames=intersect(normlzd_dds$Genename,DDR$Genename) #188
 
@@ -115,7 +154,11 @@ colnames(df)=col
 colnames(coldata)=c("sample","GSE","condition")
 #df=left_join(df,coldata,by="sample")
 #m_counts=m_counts[,c(1:88)]
+#m_counts_1=as.matrix(m_counts_1)
 
+
+
+#boxplot(m_counts_1)
 #画图
 df=pivot_longer(df,
                 cols = Normal_Cart_10_8 : OA_MT_9,

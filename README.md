@@ -32,6 +32,9 @@ Analysis RNA-Seq data of OA samples
 2024.02.01 LZZ
 1. 新增1_bind_normalized_boxplot.R(对基因表达量进行quantile normalization[limma中voom方法])
 
+2024.02.06 LZZ 
+1.修改1_bind_normalized_boxplot.R，对两组数据去批次效应
+
 2024.2.24 LZZ
 1. 新增0_import_GSE51588.R 数据为标化后的表达量
 2. 新增0_bind_data.R 合并GSE114007（标化后）+GSE51588表达矩阵，去批次效应
